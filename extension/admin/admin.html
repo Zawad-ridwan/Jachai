@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jachai Admin</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">&#x1F6E1;&#xFE0F; Jachai <span class="muted">Admin</span></div>
+    <div id="me" class="muted small"></div>
+  </header>
+
+  <div id="banner" class="banner" role="alert" hidden></div>
+
+  <div id="denied" class="denied" hidden>
+    <h1>Admins only</h1>
+    <p class="muted">Sign in with an admin account in the Jachai popup, then reopen this page.</p>
+  </div>
+
+  <div id="app" hidden>
+    <nav class="tabs" role="tablist">
+      <button data-tab="users" class="active" role="tab">Users</button>
+      <button data-tab="finance" role="tab">Finance &amp; churn</button>
+      <button data-tab="broadcasts" role="tab">Broadcasts</button>
+      <button data-tab="feedback" role="tab">Feedback</button>
+    </nav>
+
+    <!-- ===================== Users ===================== -->
+    <section id="panel-users" class="panel">
+      <div id="stats-cards" class="cards"></div>
+
+      <div class="toolbar">
+        <div class="segmented" id="role-filter">
+          <button data-role="paid" class="active">Paid users <span data-count="paid"></span></button>
+          <button data-role="regular">Regular users <span data-count="regular"></span></button>
+          <button data-role="admin">Admins <span data-count="admin"></span></button>
+          <button data-role="all">All <span data-count="total"></span></button>
+        </div>
+        <input id="user-search" type="search" placeholder="Search by email or name&hellip;" autocomplete="off" />
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>User</th><th>Role</th><th>Coins used today</th><th>Joined</th><th>Pro until</th><th></th></tr>
+          </thead>
+          <tbody id="users-body"></tbody>
+        </table>
+      </div>
+      <div class="pager">
+        <button id="prev-page">&larr; Prev</button>
+        <span id="page-label" class="muted small"></span>
+        <button id="next-page">Next &rarr;</button>
+      </div>
+    </section>
+
+    <!-- ===================== Finance ===================== -->
+    <section id="panel-finance" class="panel" hidden>
+      <form id="price-form" class="card price-card" novalidate>
+        <div>
+          <h2>Pro subscription price</h2>
+          <p class="muted small">Currently <strong id="price-current">&hellip;</strong> per month. A new price applies to new upgrades only; people already on Pro keep their current period.</p>
+        </div>
+        <div class="row">
+          <label class="field" for="price-input">
+            <span>New price</span>
+            <span class="price-input-wrap"><span aria-hidden="true">&#x09F3;</span>
+              <input id="price-input" type="number" inputmode="numeric" step="1" min="100" max="100000" required aria-describedby="price-help" />
+            </span>
+          </label>
+          <button type="submit" class="primary" id="price-save">Save price</button>
+          <span id="price-status" class="small" role="status"></span>
+        </div>
+        <p id="price-help" class="muted small"></p>
+      </form>
+
+      <div class="month-nav">
+        <button id="prev-month" aria-label="Previous month">&larr;</button>
+        <h2 id="month-label"></h2>
+        <button id="next-month" aria-label="Next month">&rarr;</button>
+      </div>
+      <div id="finance-cards" class="cards"></div>
+      <div class="table-wrap"><div id="calendar" class="calendar"></div></div>
+      <p class="muted small legend">
+        <span class="good">+ gained</span> new Pro subscriptions &middot;
+        <span class="bad">&minus; lost</span> cancellations and expirations &middot;
+        amounts are payments recorded that day, in taka. MRR uses the current Pro price.
+      </p>
+    </section>
+
+    <!-- ===================== Broadcasts ===================== -->
+    <section id="panel-broadcasts" class="panel" hidden>
+      <form id="broadcast-form" class="card">
+        <h2>New announcement</h2>
+        <label class="field">
+          <span>Send to</span>
+          <select id="bc-audience">
+            <option value="all">All users</option>
+            <option value="regular">Regular users only</option>
+            <option value="paid">Paid users only</option>
+          </select>
+        </label>
+        <p id="bc-reach" class="muted small"></p>
+        <input id="bc-title" maxlength="120" placeholder="Title" required />
+        <textarea id="bc-body" maxlength="2000" rows="4" placeholder="Message" required></textarea>
+        <div class="row">
+          <button type="submit" class="primary">Send announcement</button>
+          <span id="bc-chars" class="muted small"></span>
+        </div>
+      </form>
+
+      <h2>Sent</h2>
+      <ul id="broadcast-list" class="broadcast-list"></ul>
+    </section>
+
+    <!-- ===================== Feedback ===================== -->
+    <section id="panel-feedback" class="panel" hidden>
+      <div class="toolbar">
+        <div class="segmented" id="feedback-filter" role="group" aria-label="Show feedback from">
+          <button data-type="all" class="active">All <span data-fb-count="all"></span></button>
+          <button data-type="paid">Pro users <span data-fb-count="paid"></span></button>
+          <button data-type="regular">Regular users <span data-fb-count="regular"></span></button>
+        </div>
+        <button id="feedback-refresh">Refresh</button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="feedback-table">
+          <thead>
+            <tr><th>Date</th><th>Name</th><th>Email</th><th>User type</th><th>Feedback</th></tr>
+          </thead>
+          <tbody id="feedback-body"></tbody>
+        </table>
+      </div>
+      <div class="pager">
+        <button id="fb-prev-page">&larr; Prev</button>
+        <span id="fb-page-label" class="muted small"></span>
+        <button id="fb-next-page">Next &rarr;</button>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+# Secrets and local data: never commit these
+backend/.env
+backend/data/
+node_modules/
+*.log
+.DS_Store
