@@ -352,6 +352,7 @@ Jachai was designed and built by:
 | Tanveer Hasan |
 
 **Supervisor:** Labib Hasan Khan, Lecturer, Department of Computer Science and Engineering, Brac University
+|---|
 **Co-supervisor:** Md. Aquib Azmain, Senior Lecturer, Department of Computer Science and Engineering, Brac University
 
 Submitted in partial fulfilment of the requirements for the degree of B.Sc. in Computer Science and Engineering, Brac University, 2026.
